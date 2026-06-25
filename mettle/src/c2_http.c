@@ -329,7 +329,7 @@ static void *decode_response_with_profile(struct buffer_queue *response_q,
 
 	int start = vc->prefix_skip;
 	int end = raw_len - vc->suffix_skip;
-	if (start >= end || start < 0 || end > (int)raw_len) {
+	if (start > end || start < 0 || end > (int)raw_len) {
 		start = 0;
 		end = raw_len;
 	}
@@ -510,7 +510,6 @@ static void http_poll_timer_cb(struct ev_loop *loop, struct ev_timer *w, int rev
 	struct c2_transport_config *tc = c2_transport_get_config(ctx->t);
 	struct c2_verb_config *post_profile = tc ? tc->c2_post : NULL;
 	struct c2_verb_config *get_profile = tc ? tc->c2_get : NULL;
-
 	while (buffer_queue_len(ctx->egress) > 0) {
 		ctx->data.content = buffer_queue_remove_msg(ctx->egress, &ctx->data.content_len);
 
